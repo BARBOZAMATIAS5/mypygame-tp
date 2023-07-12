@@ -5,8 +5,9 @@ from constantes import *
 class Bullet:
     def __init__(self, x_init: int, y_init: int, frame_rate_ms: int, move_rate_ms: int, velocity_x: float, p_scale: float, direction: int) -> None:
 
-        self.__bullet_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\\bullet\peashooter_0{0}.png", 1, 13, False, scale=p_scale)
-        self.__bullet_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\\bullet\peashooter_0{0}.png", 1, 13, True, scale=p_scale)
+        self.__bullet_r = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\\bullet\peashoot\peashooter_0{0}.png", 1, 13, False, scale=p_scale)
+        self.__bullet_l = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\\bullet\peashoot\peashooter_0{0}.png", 1, 13, True, scale=p_scale)
+        self.__destroy = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\\bullet\destroy_peashoot\destroy_peashot_00{0}.png", 1, 6, True, scale=p_scale)
 
         self.__frame_actual = 0
         self.__direction = direction
@@ -24,6 +25,8 @@ class Bullet:
         self.__frame_rate_ms = frame_rate_ms
         self.__movement_time = 0
         self.__move_rate_ms = move_rate_ms
+
+        self.__is_shooting = True
     
     @property
     def rect_colision_bullet(self) -> pygame.Rect:
@@ -35,7 +38,6 @@ class Bullet:
         
         
         '''
-        self.__frame_actual = 0
         self.__move_x += (direction * self.__bullet_velocity_x)
         if direction == DIRECTION_R:
             self.__actual_animation = self.__bullet_r
@@ -47,9 +49,9 @@ class Bullet:
         
         
         
-        '''
-        if self.__rect_bullet.right < 0 or self.__rect_bullet.left > ANCHO_VENTANA:
-            self.kill()
+        '''            
+        self.__frame_actual = 0
+        self.__actual_animation = self.__destroy
     
     def change_x(self,delta_x):
         self.__rect_bullet.x += delta_x
@@ -68,7 +70,7 @@ class Bullet:
             else:
                 self.__frame_actual = 0
     
-    def do_movement(self, delta_ms)-> None:
+    def do_movement(self, delta_ms, direction)-> None:
         '''
         
         
@@ -76,10 +78,16 @@ class Bullet:
         '''
         self.__movement_time += delta_ms
         if self.__movement_time >= self.__move_rate_ms:
-            self.__movement_time = 0         
+            self.__movement_time = 0  
 
-            self.change_x(self.__move_x) 
             self.change_y(self.__move_y)
+            self.change_x(self.__move_x)
+
+            if self.__is_shooting:
+                self.move_bullet(direction)
+            if self.__rect_bullet.right < 2 and self.__rect_bullet.left > ANCHO_VENTANA - 100:
+                self.__is_shooting = False
+                self.destroy_bullet()
 
     def update(self, delta_ms):
         '''
@@ -87,13 +95,12 @@ class Bullet:
         
         
         '''
-        self.move_bullet(self.__direction)
-        self.do_movement(delta_ms)
+        self.do_movement(delta_ms, self.__direction)
         self.do_animation(delta_ms)
 
     def draw(self, display: pygame.Surface):
         if DEBUG:
-            pygame.draw.rect(display, color = (255, 0, 0), rect = self.__collition_rect)
+            pygame.draw.rect(display, color = (255, 0, 0), rect = self.__rect_bullet)
         self.__actual_image = self.__actual_animation[self.__frame_actual]
         display.blit(self.__actual_image,self.__rect_bullet)
 

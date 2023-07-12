@@ -3,12 +3,22 @@ from constantes import *
 from auxiliar import *
 
 class Enemy:
-    def __init__(self, x: int, y: int,hitbox_h: int, hitbox_w: int, speed_walk, gravity, frame_animation_ms, move_rate_ms, p_scale = P_SCALE):
+    def __init__(self, owner: str, x: int, y: int,hitbox_h: int, hitbox_w: int, speed_walk, gravity, frame_animation_ms, move_rate_ms, p_scale = P_SCALE):
 
-        self.__walk_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\enemies\enemy_flowergrun\walk\gruntflower_run_{0}.png", 1, 16, flip = False, step = 1, scale= p_scale)
-        self.__walk_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\enemies\enemy_flowergrun\walk\gruntflower_run_{0}.png", 1, 16, flip = True, step = 1, scale= p_scale)
-        self.__hit_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = False, step = 1, scale= p_scale)
-        self.__hit_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = True, step = 1, scale= p_scale)
+        if owner == "flowergun":
+            self.__walk_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\walk\gruntflower_run_{0}.png", 1, 16, flip = False, step = 1, scale= p_scale)
+            self.__walk_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\walk\gruntflower_run_{0}.png", 1, 16, flip = True, step = 1, scale= p_scale)
+            self.__hit_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = False, step = 1, scale= p_scale)
+            self.__hit_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = True, step = 1, scale= p_scale)
+        
+        elif owner == "mushroom":
+            self.__idle_r= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=False, step = 1, p_scale= p_scale)
+            self.__idle_l= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=True, step = 1, p_scale= p_scale)
+            self.__attak_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=False, step = 1, p_scale= p_scale)
+            self.__attak_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=True, step = 1, p_scale= p_scale)
+            self.__pop_down = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, p_scale=p_scale) 
+            self.__pop_up_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, p_scale=p_scale)
+            self.__pop_up_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=True, step=1, p_scale=p_scale)
 
         self.__frame = 0
         self.__move_x = 0
@@ -25,12 +35,8 @@ class Enemy:
         self.__image = self.__actual_animation[self.__frame]
 
         self.__rect = self.__image.get_rect()
-        self.__rect_x = 0
-        self.__rect_y = 0
         self.__rect.x = x
         self.__rect.y = y
-        
-
 
         #dibuja el rectangulo
         self.__rect_colision = pygame.Rect(
@@ -60,12 +66,11 @@ class Enemy:
         self.__is_walking = True
         self.__is_flying = True
         self.__is_idle = True
+        self.__pop = True
         self.__time_animation = frame_animation_ms
         self.__move_rate_ms = move_rate_ms
-        self.__y_start_jump = 0
 
         self.__tiempo_transcurrido = 0
-        self.__time_last_jump = 0
     
     #la llamo de esta forma y no es necesario usar los () porque es una property
     @property

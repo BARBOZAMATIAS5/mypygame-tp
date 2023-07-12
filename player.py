@@ -4,14 +4,15 @@ from constantes import *
 
 class Player:
     def __init__(self,x , y, speed_walk, gravity, jump, animation_rate_ms, move_rate_ms, jump_height, interval_time_jump, p_scale = P_SCALE) -> None:
-        self.stay_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= False, scale = p_scale)
-        self.stay_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= True, scale = p_scale)
-        self.walk_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= False, scale = p_scale)
-        self.walk_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= True, scale = p_scale)
-        self.jump_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = False, scale = p_scale)
-        self.jump_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = True, scale = p_scale)
-        self.shoot_r = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = False, scale = p_scale)
-        self.shoot_l = Auxiliar.getSurfaceFromSeparateFiles("assets_2\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = True, scale = p_scale)
+        self.stay_r = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= False,step=1, scale = p_scale)
+        self.stay_l = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= True,step=1, scale = p_scale)
+        self.walk_r = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= False,step=1, scale = p_scale)
+        self.walk_l = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= True,step=1, scale = p_scale)
+        self.jump_r = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = False,step=1, scale = p_scale)
+        self.jump_l = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = True,step=1, scale = p_scale)
+        self.shoot_r = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = False,step=1, scale = p_scale)
+        self.shoot_l = Auxiliar.getSurfaceFromSeparateFiles("assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = True,step=1, scale = p_scale)
+        self.death = True
 
         self.frame = 0
         self.lives = 5
@@ -55,6 +56,18 @@ class Player:
         self.is_shoot = False
         self.is_falling = False
         self.is_walking = False
+
+    @property
+    def rect_colision_player(self):
+        '''
+        
+        
+        
+        '''
+        return self.collition_rect
+    #la llamo de esta forma y es necesario introducir un parametro
+    def get_rect_colision(self) -> pygame.Rect:
+        return self.collition_rect
 
     def walk (self, direction):
         if (self.is_walking == False and self.is_jump == False and self.is_falling == False):
@@ -112,18 +125,6 @@ class Player:
         else:
             self.is_walking = False
 
-    # def shoot_stay(self, on_off = True):
-    #     self.is_shoot = on_off
-    #     self.is_move = False
-    #     if (on_off == True and self.is_jump == False and self.is_move == False):
-    #         if(self.animation != self.shooting_stay_r and self.animation != self.shooting_stay_l):
-    #             self.frame = 0
-    #             self.is_shoot = True
-    #             if(self.direction == DIRECTION_R):
-    #                 self.animation = self.shooting_stay_r
-    #             else:
-    #                 self.animation = self.shooting_stay_l
-
     def change_x(self,delta_x):
         self.rect.x += delta_x
         self.collition_rect.x += delta_x
@@ -136,6 +137,14 @@ class Player:
         self.ground_collition_rect.y += delta_y
         self.roof_colision_rect.y += delta_y
     
+    def out_display(self):
+        '''
+        
+        
+        
+        '''
+        
+
     def is_on_plataform(self, plataform_list):
         retorno = False
 

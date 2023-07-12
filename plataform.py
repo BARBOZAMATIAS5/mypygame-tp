@@ -6,7 +6,7 @@ from constantes import *
 class Plataform:
     def __init__(self, x, y,width, height,  type=1):
 
-        self.image_list= Auxiliar.getSurfaceFromSeparateFiles("assets_2\plataform\plataform_flat_01.png",1,2,flip=False,w=width,h=height)
+        self.image_list= Auxiliar.getSurfaceFromSeparateFiles("assets\plataform\plataform_flat_01.png",1,2,flip=False,w=width,h=height)
         
         self.image = self.image_list[type]
         self.rect = self.image.get_rect()
