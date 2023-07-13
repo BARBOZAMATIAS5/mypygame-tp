@@ -85,7 +85,7 @@ class Bullet:
 
             if self.__is_shooting:
                 self.move_bullet(direction)
-            if self.__rect_bullet.right < 2 and self.__rect_bullet.left > ANCHO_VENTANA - 100:
+            if self.__rect_bullet.right < 0 and self.__rect_bullet.left > ANCHO_VENTANA:
                 self.__is_shooting = False
                 self.destroy_bullet()
 

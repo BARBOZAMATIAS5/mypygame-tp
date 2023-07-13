@@ -51,11 +51,13 @@ class Player:
         self.tiempo_transcurrido = 0
         self.tiempo_last_jump = 0
         self.interval_time_jump = interval_time_jump
+        self.interval_shoot = 500
 
         self.is_jump = False
         self.is_shoot = False
         self.is_falling = False
         self.is_walking = False
+        self.cooldown_shoot = 0
 
     @property
     def rect_colision_player(self):

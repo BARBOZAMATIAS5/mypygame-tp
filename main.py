@@ -8,11 +8,14 @@ from level_1 import LevelGame1
 flags = DOUBLEBUF
 screen = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA), flags, 16)
 pygame.init()
-clock = pygame.time.Clock()
- 
+
+
 form_game_l1= LevelGame1(name="form_game_l1", master_surface= screen, x=0,y=0,w=ANCHO_VENTANA,h=ALTO_VENTANA,color_background=None,color_border=None,active=True)
 
 while True:
+
+    clock = pygame.time.Clock()
+
     lista_eventos =pygame.event.get()
     for event in lista_eventos:
         if event.type == pygame.QUIT:

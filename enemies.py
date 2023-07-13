@@ -11,18 +11,24 @@ class Enemy:
             self.__hit_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = False, step = 1, scale= p_scale)
             self.__hit_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_flowergrun\hit\gruntflower_hit_{0}.png", 1, 7, flip = True, step = 1, scale= p_scale)
         
+            self.__actual_animation = self.__walk_r
+
         elif owner == "mushroom":
-            self.__idle_r= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=False, step = 1, p_scale= p_scale)
-            self.__idle_l= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=True, step = 1, p_scale= p_scale)
-            self.__attak_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=False, step = 1, p_scale= p_scale)
-            self.__attak_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=True, step = 1, p_scale= p_scale)
-            self.__pop_down = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, p_scale=p_scale) 
-            self.__pop_up_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, p_scale=p_scale)
-            self.__pop_up_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=True, step=1, p_scale=p_scale)
+            self.__idle_r= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=False, step = 1, scale= p_scale)
+            self.__idle_l= Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\idle\mushroom_idle_000{0}.png", 1, 9, flip=True, step = 1, scale= p_scale)
+            self.__shoot_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=False, step = 1, scale= p_scale)
+            self.__shoot_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\\attack\mushroom_attack_00{0}.png", 1, 15, flip=True, step = 1, scale= p_scale)
+            self.__pop_down = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, scale= p_scale) 
+            self.__pop_up_r = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=False, step=1, scale= p_scale)
+            self.__pop_up_l = Auxiliar.getSurfaceFromSeparateFiles("assets\enemies\enemy_mushroom\pop_down\mushroom_boil_000{0}.png", 1, 3, flip=True, step=1, scale= p_scale)
+
+            self.__actual_animation = self.__pop_down
+            
 
         self.__frame = 0
         self.__move_x = 0
         self.__move_y = 0
+        self.__owner = owner
 
         self.__cadencia = 0
         self.__last_shoot = pygame.time.get_ticks() #cada cuanto tiempo dispara
@@ -31,10 +37,10 @@ class Enemy:
         self.__speed_walk = speed_walk
         self.__gravity_enemy = gravity
         #self.__power_jumping = power_jump | cuantos pixeles se mueve cuando salta
-        self.__actual_animation = self.__walk_r
         self.__image = self.__actual_animation[self.__frame]
 
         self.__rect = self.__image.get_rect()
+        self.__rect.center = (x,y)
         self.__rect.x = x
         self.__rect.y = y
 
@@ -64,9 +70,10 @@ class Enemy:
         #self.__sound = pygame.mixer.Sound("ruta_a_audio.mp3/.wav")
 
         self.__is_walking = True
-        self.__is_flying = True
         self.__is_idle = True
-        self.__pop = True
+        self.__is_shoot = True
+        self.__is_falling = True
+        self.__down = True
         self.__time_animation = frame_animation_ms
         self.__move_rate_ms = move_rate_ms
 
@@ -114,19 +121,17 @@ class Enemy:
         self.__move_y = 0
         self.__frame = 0
     
-    def shoot(self, on_off = True):
-        self.is_shoot = on_off
-        if(on_off == True):
-            if(self.animation != self.__walk_r and self.animation != self.__walk_l):
-                self.frame = 0
-                if(self.direction == DIRECTION_R):
-                    self.move_x = 0
-                    self.animation = self.__walk_r
-                elif(self.direction == DIRECTION_L):
-                    self.move_x = 0
-                    self.animation = self.__walk_l
-        else:
-            self.is_walking = False
+    def shoot(self, direction, on_off= True):
+            self.__is_shoot = on_off
+            if(on_off == True):
+                if(self.__actual_animation != self.__shoot_r and self.__actual_animation != self.__shoot_l):
+                    self.frame = 0
+                    if(direction == DIRECTION_R):
+                        self.move_x = 0
+                        self.__actual_animation = self.__shoot_r
+                    elif(direction == DIRECTION_L):
+                        self.move_x = 0
+                        self.__actual_animation = self.__shoot_l
     
     # def jump(self, on_off = True) -> None:
     #     '''
@@ -149,51 +154,35 @@ class Enemy:
     #     if not on_off:
     #         self.__is_jumping = on_off
     #         self.__stay()
+    def pop_down_up(self, direction):
+        '''
+        
+        
+        
+        '''
+        if self.__down:
+            self.__actual_animation = self.__pop_down
+        else:
+            if direction == DIRECTION_R:
+                self.__actual_animation = self.__pop_up_r
+            else:
+                self.__actual_animation = self.__pop_up_l
 
-    # def stay(self) -> None:
-    #     '''
-        
-        
-        
-    #     '''
-    #     if self.__actual_animation != self.__stay_r and self.__actual_animation != self.__stay_l:
-    #         if self.__direction == DIRECTION_R:
-    #             self.__actual_animation = self.__stay_r
-    #         else:
-    #             self.__actual_animation = self.__stay_l
-    #         self.__frame = 0 
-    #         self.__move_x = 0 
-    #         self.__move_y = 0
 
-    # def movement_random(self) -> None:
-    #     '''
+    def stay(self, direction = DIRECTION_R) -> None:
+        '''
         
         
         
-    #     '''
-    #     if self.__direction == DIRECTION_R:
-    #         self.walk(self.__direction)
-    #         if self.__rect.x >= (ANCHO_VENTANA) - 20:
-    #             self.attack(self.__direction)
-
-    #     elif(self.__direction == DIRECTION_L):
-    #         self.walk(self.__direction)
-    #         if self.__rect.x == 40:
-    #             self.attack(self.__direction)
-    
-    # def movement_to_player(self, list_player):
-    #     '''
-        
-        
-        
-    #     '''
-    #     for player in list_player:
-    #         if self.__rect_x <= player.rect.x:
-    #             self.__orientation = DIRECTION_R
-    #             self.__actual_animation = self.__stay_r
-    #         if self.__rect_x > player.rect.x:
-    #             self.__orientation = DIRECTION_L
-    #             self.__actual_animation = self.__stay_l
+        '''
+        if self.__actual_animation != self.__idle_r and self.__actual_animation != self.__idle_l:
+            if direction == DIRECTION_R:
+                self.__actual_animation = self.__idle_r
+            else:
+                self.__actual_animation = self.__idle_l
+            self.__frame = 0
+            self.__move_x = 0 
+            self.__move_y = 0
     
     def change_x(self, delta_x):
         '''
@@ -227,11 +216,11 @@ class Enemy:
             return True
         else:
             for plataform in list_plataform:
-                if self.__floor_colision_rect.colliderect(plataform):
+                if self.__floor_colision_rect.colliderect(plataform.ground_collition_rect):
                     return True
         return False
     
-    def generate_movement(self, delta_ms): #list_plataform
+    def generate_movement(self, delta_ms, list_plataform): #list_plataform
         '''
         
 
@@ -248,24 +237,40 @@ class Enemy:
 
             self.change_y(self.__move_y)
 
-            if self.__is_walking:
-                self.__contador += 1
-                if self.__contador <= 50:
-                    self.walk(DIRECTION_R)
-                elif self.__contador <= 100:
-                    self.walk(DIRECTION_L)
+            if self.__owner == "flowergun":
+                if self.__is_walking:
+                    self.__contador += 1
+                    if self.__contador <= 50:
+                        self.walk(DIRECTION_R)
+                    elif self.__contador <= 100:
+                        self.walk(DIRECTION_L)
+                    else:
+                        self.__contador = -1
+                    self.change_x(self.__move_x)
+            
+            elif self.__owner == "mushroom":
+                # self.__down = False
+                if self.__down:
+                    self.stay(DIRECTION_R)
+                elif self.__is_shoot:
+                    self.__contador += 1
+                    if self.__contador <= 50:
+                        self.shoot(DIRECTION_R)
+                    elif self.__contador <= 100:
+                        self.shoot(DIRECTION_L)
+                    else:
+                        self.__contador = -50
+                        self.stay(DIRECTION_R)
                 else:
-                    self.__contador = -1
-                self.change_x(self.__move_x)
-                
-            # if not self.be_on_plataform(list_plataform):
-            #     if self.__move_y == 0:
-            #         self.__falling = True
-            #         self.change_y(self.__gravity_enemy)
-            #     else: 
-            #         if (self.__is_jumping):
-            #             self.jump(False)
-            #         self.__falling = False
+                    self.stay()
+
+            if not self.be_on_plataform(list_plataform):
+                if self.__move_y == 0:
+                    self.__is_falling = True
+                    self.change_y(self.__gravity_enemy)
+                else: 
+                    if (self.__is_jumping):
+                        self.__is_falling = False
     
     def consecutives_hits(self, list_player, list_bullets)-> bool:
         '''
@@ -301,7 +306,7 @@ class Enemy:
             else:
                 self.__frame = 0
     
-    def update(self, delta_ms)-> None: #, list_plataform, list_players, list_bullets
+    def update(self, delta_ms, list_plataform)-> None: #, list_plataform, list_players, list_bullets
         '''
         Actualiza el movimiento y animacion del enemigo, en caso de haber impactado, realizara la animacion
         y movimiento de golpear/atacar.
@@ -312,7 +317,7 @@ class Enemy:
             list_bullets: es la lista de los proyectiles de los jugadores actuales en el nivel.
         Return: None
         '''
-        self.generate_movement(delta_ms)
+        self.generate_movement(delta_ms, list_plataform)
         self.do_animation(delta_ms)
         # self.consecutives_hits(delta_ms, list_players, list_bullets)
     
