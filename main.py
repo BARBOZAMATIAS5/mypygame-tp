@@ -9,7 +9,6 @@ from level_3 import LevelGame3
 from background import Background
 from main_menu import *
 import boton
-
 pygame.init()
 pygame.display.set_caption('Cuphead: Las últimas monedas.')
 flags = DOUBLEBUF
