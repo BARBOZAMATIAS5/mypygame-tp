@@ -10,6 +10,14 @@ class Boton:
         self.clicked = False
 
     def draw(self, surface):
+        '''
+        Dibuja en la pantalla una imagen la cual, cada vez que se haga click en la misma, retornará
+        el booleano 'True', cada vez que no se haga click, retornará el booleano 'False'
+
+        Parametros: surface (corresponde a la configuracion de resolucion de pygame)
+        
+        Retorna un booleano.
+        '''
         action = False
 
         mouse = pygame.mouse.get_pos()
@@ -21,6 +29,6 @@ class Boton:
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
         
-        surface.blit(self.image, (self.rect.x, self.rect.y))
+        surface.blit(self.image,(self.rect.x, self.rect.y))
 
         return action

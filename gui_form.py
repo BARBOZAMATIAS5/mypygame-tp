@@ -26,22 +26,39 @@ class Form():
             
     @staticmethod
     def set_active(name):
+        '''
+        
+        
+        
+        '''
         for aux_form in Form.forms_dict.values():
             aux_form.active = False
         Form.forms_dict[name].active = True
     
     @staticmethod
     def get_active():
+        '''
+        
+        
+        
+        '''
         for aux_form in Form.forms_dict.values():
             if(aux_form.active):
                 return aux_form
         return None
 
-    def render(self):
-        pass
-
-    def update(self,lista_eventos):
+    def update(self):
+        '''
+        
+        
+        
+        '''
         pass
 
     def draw(self):
+        '''
+        
+        
+        
+        '''
         self.master_surface.blit(self.surface,self.slave_rect)

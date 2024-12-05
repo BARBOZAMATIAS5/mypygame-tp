@@ -6,32 +6,32 @@ class Player():
     def __init__(self,x , y, speed_walk, gravity, jump, animation_rate_ms, move_rate_ms, jump_height, interval_time_jump, p_scale = P_SCALE) -> None:
         
         self.__stay_r = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= False,step=1, scale = p_scale)
+            "assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= False, scale = p_scale)
         self.__stay_l = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= True,step=1, scale = p_scale)
+            "assets\cuphead\stay\cuphead_idle_{0}.png", 1, 9, flip= True, scale = p_scale)
         
         self.__walk_r = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= False,step=1, scale = p_scale)
+            "assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= False, scale = p_scale)
         self.__walk_l = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= True,step=1, scale = p_scale)
+            "assets\cuphead\walk\cuphead_run_{0}.png", 1, 16, flip= True, scale = p_scale)
         
         self.__jump_r = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = False,step=1, scale = p_scale)
+            "assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = False, scale = p_scale)
         self.__jump_l = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = True,step=1, scale = p_scale)
+            "assets\cuphead\jump\cuphead_jump_{0}.png", 1, 8, flip = True, scale = p_scale)
         
         self.__shoot_r = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = False,step=1, scale = p_scale)
+            "assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = False, scale = p_scale)
         self.__shoot_l = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = True,step=1, scale = p_scale)
+            "assets\cuphead\shooting\cuphead_shoot_straight_{0}.png", 1, 5, flip = True, scale = p_scale)
         
-        self.__hit_r = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\hit\cuphead_hit_000{0}.png", 1, 6, flip = False,step=1, scale = p_scale)
-        self.__hit_l = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\hit\cuphead_hit_000{0}.png", 1, 6, flip = True,step=1, scale = p_scale)
+        self.__auch_r = Auxiliar.getSurfaceFromSeparateFiles(
+            "assets\cuphead\hit\cuphead_hit_000{0}.png", 1, 6, flip = False, scale = p_scale)
+        self.__auch_l = Auxiliar.getSurfaceFromSeparateFiles(
+            "assets\cuphead\hit\cuphead_hit_000{0}.png", 1, 6, flip = True, scale = p_scale)
         
         self.__death = Auxiliar.getSurfaceFromSeparateFiles(
-            "assets\cuphead\ghost\cuphead_ghost_00{0}.png", 1, 24, flip = False,step=1, scale = p_scale)
+            "assets\cuphead\ghost\cuphead_ghost_00{0}.png", 1, 24, flip = False, scale = p_scale)
 
         self.__frame = 0
         self.score = 0
@@ -72,12 +72,13 @@ class Player():
         self.interval_shoot = 300
         self.cooldown_shoot = 0
 
+        self.have_coins = 0
         self.is_shoot = False
         self.__is_jump = False
         self.__is_falling = False
         self.__is_walking = False
         self.__is_alive = True
-        self.__is_live = 100
+        self.__is_live = 5
 
     @property
     def rect_colision_player(self):
@@ -159,26 +160,29 @@ class Player():
                     self.__animation = self.__shoot_l
         else:
             self.__is_walking = False
-    
+
+    def death(self):
+        self.frame = 0
+        self.__move_y = -1
+        self.__move_x = 0
+        self.__animation = self.__death
+
     def hit(self, bullet_list_enemy, enemy_list):
         for bullet in bullet_list_enemy:
             if self.collition_rect.colliderect(bullet.rect_colision_bullet) == True:
-                self.__is_live -= 20
+                self.__is_live -= 1
                 return self.__is_live
             
         for enemy in enemy_list:
             if self.collition_rect.colliderect(enemy.collition_rect) == True:
-                self.__is_live -= 20
+                self.__is_live -= 1
                 return self.__is_live
         return None
     
-    def death(self):
-        if self.__is_live <= 0 or self.rect.y > ALTO_VENTANA:
+    def check_death(self):
+
+        if self.__is_live < 0 or self.rect.y > ALTO_VENTANA:
             self.__is_alive = False
-            self.frame = 0
-            self.__move_y = -1
-            self.__move_x = 0
-            self.__animation = self.__death
 
     def change_x(self,delta_x):
         self.rect.x += delta_x
@@ -213,7 +217,7 @@ class Player():
 
     def do_movement(self, delta_ms, plataform_list):
         self.__move_rate_ms += delta_ms
-        if self.__is_live > 0 and self.rect.y < ALTO_VENTANA:
+        if self.__is_alive:
             if(self.__move_rate_ms >= self.__frame_rate_ms):
                 self.__move_rate_ms = 0
                 if (abs(self.__y_start_jump) - abs(self.rect.y) > self.__jump_height and self.__is_jump):
@@ -223,6 +227,7 @@ class Player():
                 self.change_x(self.__move_x)
 
                 self.out_display()
+                self.check_death()
                 if (not self.is_on_plataform(plataform_list)):
                     if (self.__move_y == 0):
                         self.__is_falling = True
@@ -261,7 +266,7 @@ class Player():
 
     def events(self, delta_ms, keys):
         self.tiempo_transcurrido += delta_ms
-        if self.__is_live > 0:
+        if self.__is_alive:
             if (keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and not keys[pygame.K_SPACE]):
                 self.walk(DIRECTION_L)
             if (keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT] and not keys[pygame.K_SPACE]):
