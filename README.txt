@@ -6,4 +6,4 @@ Basado en el juego Cuphead: quedan unas ultimas monedas por agarrar por lo que C
 
 PREVIEW
 
-![imagen](https://github.com/BARBOZAMATIAS5/mypygame-tp/blob/main/previsualizacion_game/menu%20pygame%20cuphead.png?raw=true)
+![imagen](https://github.com/BARBOZAMATIAS5/mypygame-tp/previsualizacion_game/menu%20pygame%20cuphead.png?raw=true)
