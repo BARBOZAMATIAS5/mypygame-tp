@@ -7,6 +7,13 @@ Basado en el juego Cuphead: quedan unas ultimas monedas por agarrar por lo que C
 PREVIEW
 
 MENU
-
 ![menu_pygame](previsualizacion_game/menu_pygame_cuphead.png)
 
+NIVEL 1
+![menu_pygame](previsualizacion_game/nivel_1_pygame_cuphead.png)
+
+NIVEL 2
+![menu_pygame](previsualizacion_game/nivel_2_pygame_cuphead.png)
+
+NIVEL 3
+![menu_pygame](previsualizacion_game/nivel_3_pygame_cuphead.png)
