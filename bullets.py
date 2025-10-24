@@ -15,11 +15,6 @@ class Bullet():
                 "assets\enemies\enemy_mushroom\\bullet\mushroom_poison_cloud_00{0}.png", 1, 12, False, scale=p_scale)
             self.__bullet_l = Auxiliar.getSurfaceFromSeparateFiles(
                 "assets\enemies\enemy_mushroom\\bullet\mushroom_poison_cloud_00{0}.png", 1, 12, True, scale=p_scale)
-        elif owner == "enemy_2":
-            self.__bullet_r = Auxiliar.getSurfaceFromSeparateFiles(
-                "assets\enemies\enemy_egghead\bullet\egghead_bullet_00{0}.png", 1, 8, True, scale=p_scale)
-            self.__bullet_l = Auxiliar.getSurfaceFromSeparateFiles(
-                "assets\enemies\enemy_egghead\bullet\egghead_bullet_00{0}.png", 1, 8, False, scale=p_scale) 
 
         self.__frame_actual = 0
         self.__direction = direction
@@ -86,6 +81,7 @@ class Bullet():
         if hit == 'enemy':
             for enemy in enemy_list:
                 if (self.__collition_rect.colliderect(enemy.collition_rect)):
+                    enemy.hit += 1
                     collition = True
         
         if (self.__rect_bullet.x < 0 or self.__rect_bullet.x > ANCHO_VENTANA):

@@ -43,7 +43,7 @@ def main_menu_game(on_off):
             options_game(True)
 
         if menu_game.start(screen):
-            start_game_init(True, True, "level_03")
+            start_game_init(True, True, "level_02")
 
         pygame.display.flip()
         pygame.display.update()

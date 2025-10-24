@@ -251,7 +251,7 @@
         "frame_animation_ms":35,
         "move_rate_ms":30,
         "direction": "None",
-        "count_cd":50
+        "count_cd":60
         },
         {"type": "flowergun",
         "x": -20, 

@@ -1,6 +1,7 @@
 import pygame
 from constantes import *
 
+
 class Auxiliar:
 
     @staticmethod
@@ -43,10 +44,11 @@ class Auxiliar:
         
         No retorna nada
         '''
+        
         for bullet in bullets_list_player:
             if bullet.check_collition("enemy", enemies_list, player):
                 for enemy in enemies_list:
-                    if enemy.hit(bullets_list_player) == 3:
+                    if enemy.getSelfHit() == 3:
                         player.score += 10
                         enemies_list.remove(enemy)
                 bullets_list_player.remove(bullet)
@@ -72,10 +74,12 @@ class Auxiliar:
         
         Retorna una lista que contiene los proyectiles cada vez disparados por el jugador o enemigo.
         '''
+        from enemies import Enemy
+        from player import Player
         if owner.is_shoot:
-            if((owner.tiempo_transcurrido - owner.cooldown_shoot) > owner.interval_shoot):
-                owner.cooldown_shoot = owner.tiempo_transcurrido
-                if character == "player":
+            if type(owner) == Player:
+                if((owner.tiempo_transcurrido - owner.cooldown_shoot) > owner.interval_shoot):
+                    owner.cooldown_shoot = owner.tiempo_transcurrido
                     bullet_list.append(bullet(owner= character,
                         x_init=owner.rect.centerx +
                         (0.8 * owner.rect.size[0] * owner.direction),
@@ -83,7 +87,8 @@ class Auxiliar:
                         frame_rate_ms=30, move_rate_ms=60,
                         velocity_x=26, p_scale=0.5,
                         direction=owner.direction))
-                elif character == "enemy":
+            elif type(owner) == Enemy:
+                if owner.contador == owner.count_cd:
                     bullet_list.append(bullet(owner= character,
                         x_init=owner.rect.centerx +
                         (0.8 * owner.rect.size[0] * owner.direction),
