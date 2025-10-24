@@ -7,4 +7,5 @@ Basado en el juego Cuphead: quedan unas ultimas monedas por agarrar por lo que C
 PREVIEW
 
 MENU
+
 ![menu_pygame](previsualizacion_game/menu_pygame_cuphead.png)
