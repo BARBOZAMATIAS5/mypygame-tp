@@ -1,4 +1,9 @@
 proyecto_pygame
 
-Este juego es una continuación de Cuphead (de forma ficticia, no oficial). El objetivo es recuperar la últimas monedas atravesando diferentes niveles y eliminando a los diferentes enemigos que se crucen en tu camino.
+Este proyecto tenía pensado ser presentado como 2do parcial, asi mismo como final, de la asignatura Programacion I.
 
+Basado en el juego Cuphead: quedan unas ultimas monedas por agarrar por lo que Cuphead debe buscarlas y tomarlas. Deberá recorrer 3 escenarios y donde se encontrará con diferentes enemigos que se lo harán dificl.
+
+PREVIEW
+
+![imagen](https://github.com/BARBOZAMATIAS5/mypygame-tp/blob/main/previsualizacion_game/menu%20pygame%20cuphead.png)
